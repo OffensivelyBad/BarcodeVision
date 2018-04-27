@@ -12,19 +12,29 @@ import Vision
 class MainViewController: UIViewController {
 
     @IBOutlet weak var inputImageView: UIImageView!
+    private var locations = [VNRectangleObservation]()
+    private var lpns = [VNRectangleObservation]()
+    private var testImage = UIImage(named: "QRRack")
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        detectTestImage()
+        addTestImage()
+    }
+    
+    private func addTestImage() {
+        guard let image = testImage else { return }
+        inputImageView.image = image
+        inputImageView.contentMode = .scaleToFill
     }
     
     private func detectTestImage() {
-        guard let image = UIImage(named: "Rack") else { return }
-        inputImageView.image = image
-        inputImageView.contentMode = .scaleToFill
+        guard let image = testImage else { return }
         let barcodeRequest = getBarcodeRequest()
         detectBarcode(in: image, and: barcodeRequest)
+    }
+    
+    @IBAction private func analyzeImage() {
+        detectTestImage()
     }
 
 }
@@ -34,18 +44,11 @@ extension MainViewController {
     
     private func getBarcodeRequest() -> VNDetectBarcodesRequest {
         return VNDetectBarcodesRequest(completionHandler: { [unowned self] (request, error) in
-            guard let results = request.results else {
+            guard let results = request.results, error == nil else {
                 // TODO: handle no barcodes found
                 return
             }
-            for result in results {
-                guard let barcode = result as? VNBarcodeObservation else { continue }
-                print(barcode.payloadStringValue ?? "", terminator: "\n\n")
-                
-                if let rect = result as? VNRectangleObservation {
-                    self.draw(box: rect)
-                }
-            }
+            self.processBarcodeResults(results)
         })
     }
     
@@ -60,12 +63,31 @@ extension MainViewController {
         }
     }
     
+    private func processBarcodeResults(_ results: [Any]) {
+        for result in results {
+            guard let barcode = result as? VNBarcodeObservation else { continue }
+            guard let payloadString = barcode.payloadStringValue else { continue }
+            guard let rect = result as? VNRectangleObservation else { continue }
+            
+            print(payloadString, terminator: "\n\n")
+
+            if payloadString.isLocation() {
+                self.locations.append(rect)
+                self.draw(box: rect, color: UIColor.blue)
+            }
+            else {
+                self.lpns.append(rect)
+                self.draw(box: rect, color: UIColor.red)
+            }
+        }
+    }
+    
 }
 
 // MARK: - Rendering
 extension MainViewController {
     
-    func draw(box: VNRectangleObservation) {
+    func draw(box: VNRectangleObservation, color: UIColor) {
         let x = box.topLeft.x * inputImageView.frame.size.width
         let y = (1 - box.topLeft.y) * inputImageView.frame.size.height
         let width = (box.topRight.x - box.bottomLeft.x) * inputImageView.frame.size.width
@@ -74,7 +96,7 @@ extension MainViewController {
         let layer = CALayer()
         layer.borderWidth = 2
         layer.frame = CGRect(x: x - layer.borderWidth, y: y - layer.borderWidth, width: width + layer.borderWidth * 2, height: height + layer.borderWidth * 2)
-        layer.borderColor = UIColor.red.cgColor
+        layer.borderColor = color.cgColor
         inputImageView.layer.addSublayer(layer)
     }
     

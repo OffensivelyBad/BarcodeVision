@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		296978102093A7DA00F73D44 /* String+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2969780F2093A7DA00F73D44 /* String+Convenience.swift */; };
+		296978112093A7DA00F73D44 /* String+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2969780F2093A7DA00F73D44 /* String+Convenience.swift */; };
+		296978122093A7DA00F73D44 /* String+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2969780F2093A7DA00F73D44 /* String+Convenience.swift */; };
 		29B187D920916DB800B278B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B187D820916DB800B278B4 /* AppDelegate.swift */; };
 		29B187DE20916DB800B278B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 29B187DC20916DB800B278B4 /* Main.storyboard */; };
 		29B187E320916DBA00B278B4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 29B187E120916DBA00B278B4 /* LaunchScreen.storyboard */; };
@@ -34,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2969780F2093A7DA00F73D44 /* String+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Convenience.swift"; sourceTree = "<group>"; };
 		29B187D520916DB800B278B4 /* BarcodeVision.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BarcodeVision.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		29B187D820916DB800B278B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		29B187DD20916DB800B278B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -101,6 +105,7 @@
 				29B1880620916EA600B278B4 /* MainViewController.swift */,
 				29B187DC20916DB800B278B4 /* Main.storyboard */,
 				29B187E420916DBA00B278B4 /* Info.plist */,
+				2969780F2093A7DA00F73D44 /* String+Convenience.swift */,
 			);
 			path = BarcodeVision;
 			sourceTree = "<group>";
@@ -266,6 +271,7 @@
 			files = (
 				29B187D920916DB800B278B4 /* AppDelegate.swift in Sources */,
 				29B1880720916EA600B278B4 /* MainViewController.swift in Sources */,
+				296978102093A7DA00F73D44 /* String+Convenience.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,6 +279,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				296978112093A7DA00F73D44 /* String+Convenience.swift in Sources */,
 				29B187EE20916DBA00B278B4 /* BarcodeVisionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -281,6 +288,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				296978122093A7DA00F73D44 /* String+Convenience.swift in Sources */,
 				29B187F920916DBA00B278B4 /* BarcodeVisionUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
