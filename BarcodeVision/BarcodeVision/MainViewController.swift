@@ -85,9 +85,9 @@ class MainViewController: UIViewController {
         linePath.move(to: fromPoint)
         linePath.addLine(to: toPoint)
         line.path = linePath.cgPath
-        line.strokeColor = UIColor.red.cgColor
+        line.strokeColor = UIColor.cyan.cgColor
         line.lineWidth = 1
-        view.layer.addSublayer(line)
+        inputImageView.layer.addSublayer(line)
     }
     
     @IBAction private func analyzeImage() {
