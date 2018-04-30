@@ -14,7 +14,11 @@ class MainViewController: UIViewController {
     @IBOutlet weak var inputImageView: UIImageView!
     private var locations = [VNRectangleObservation]()
     private var lpns = [VNRectangleObservation]()
-    private var testImage = UIImage(named: "QRRack")
+    private var activityIndicator = UIActivityIndicatorView()
+    private var loadingView = UIView()
+    private var loading = false {
+        didSet { toggleLoading(on: loading) }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,19 +26,100 @@ class MainViewController: UIViewController {
     }
     
     private func addTestImage() {
+        let testImage = UIImage(named: "QRRack")
         guard let image = testImage else { return }
         inputImageView.image = image
         inputImageView.contentMode = .scaleToFill
     }
     
-    private func detectTestImage() {
-        guard let image = testImage else { return }
-        let barcodeRequest = getBarcodeRequest()
-        detectBarcode(in: image, and: barcodeRequest)
+    private func detectBarcodes(inImage image: UIImage) {
+//        loading = true
+        DispatchQueue.background(delay: 0, background: {
+            let barcodeRequest = self.getBarcodeRequest()
+            self.detectBarcode(in: image, and: barcodeRequest)
+        }) {
+            DispatchQueue.main.async {
+                self.loading = false
+                self.analyzeBarcodes()
+            }
+        }
+    }
+    
+    private func analyzeBarcodes() {
+        for lpn in lpns {
+            var nearestLocation = CGPoint.zero
+            var distanceToLocation: CGFloat = 0
+            for location in locations {
+                guard lpn.bottomLeft.y > location.topLeft.y else { continue }
+                let newDistance = distance(from: lpn.bottomLeft, to: location.topLeft)
+                if distanceToLocation == 0 {
+                    distanceToLocation = newDistance
+                    nearestLocation = location.topLeft
+                } else {
+                    nearestLocation = newDistance < distanceToLocation ? location.topLeft : nearestLocation
+                    distanceToLocation = newDistance < distanceToLocation ? newDistance : distanceToLocation
+                }
+            }
+            drawLine(from: lpn.bottomLeft, to: nearestLocation)
+        }
+        
+        for rect in lpns {
+            self.draw(box: rect, color: UIColor.red)
+        }
+        for rect in locations {
+            self.draw(box: rect, color: UIColor.blue)
+        }
+    }
+    
+    private func drawLine(from: CGPoint, to: CGPoint) {
+        let fromX = from.x * inputImageView.frame.size.width
+        let fromY = (1 - from.y) * inputImageView.frame.size.height
+        let fromPoint = CGPoint(x: fromX, y: fromY)
+        
+        let toX = to.x * inputImageView.frame.size.width
+        let toY = (1 - to.y) * inputImageView.frame.size.height
+        let toPoint = CGPoint(x: toX, y: toY)
+        
+        let line = CAShapeLayer()
+        let linePath = UIBezierPath()
+        linePath.move(to: fromPoint)
+        linePath.addLine(to: toPoint)
+        line.path = linePath.cgPath
+        line.strokeColor = UIColor.red.cgColor
+        line.lineWidth = 1
+        view.layer.addSublayer(line)
     }
     
     @IBAction private func analyzeImage() {
-        detectTestImage()
+        guard let image = inputImageView.image else { return }
+        detectBarcodes(inImage: image)
+    }
+    
+    func toggleLoading(on: Bool) {
+        if on {
+            guard activityIndicator.superview == nil, loadingView.superview == nil else { return }
+            loadingView = UIView(frame: view.frame)
+            loadingView.backgroundColor = UIColor.darkGray
+            loadingView.alpha = 0.5
+            view.addSubview(loadingView)
+            
+            activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+            activityIndicator.color = UIColor.darkGray
+            activityIndicator.center = view.center
+            view.addSubview(activityIndicator)
+            activityIndicator.startAnimating()
+        }
+        else {
+            guard activityIndicator.superview != nil, loadingView.superview != nil else { return }
+            activityIndicator.stopAnimating()
+            activityIndicator.removeFromSuperview()
+            
+            loadingView.removeFromSuperview()
+        }
+    }
+    
+    func distance(from: CGPoint, to: CGPoint) -> CGFloat {
+        return (from.x - to.x) * (from.x - to.x) + (from.y - to.y) * (from.y - to.y)
     }
 
 }
@@ -73,11 +158,9 @@ extension MainViewController {
 
             if payloadString.isLocation() {
                 self.locations.append(rect)
-                self.draw(box: rect, color: UIColor.blue)
             }
             else {
                 self.lpns.append(rect)
-                self.draw(box: rect, color: UIColor.red)
             }
         }
     }
