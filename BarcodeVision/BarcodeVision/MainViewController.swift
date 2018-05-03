@@ -22,7 +22,19 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addButtons()
         addTestImage()
+    }
+    
+    private func addButtons() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Import", style: .plain, target: self, action: #selector(MainViewController.importPhoto))
+    }
+    
+    @objc private func importPhoto() {
+        let picker = UIImagePickerController()
+        picker.allowsEditing = true
+        picker.delegate = self
+        present(picker, animated: true, completion: nil)
     }
     
     private func addTestImage() {
@@ -33,7 +45,7 @@ class MainViewController: UIViewController {
     }
     
     private func detectBarcodes(inImage image: UIImage) {
-//        loading = true
+        loading = true
         DispatchQueue.background(delay: 0, background: {
             let barcodeRequest = self.getBarcodeRequest()
             self.detectBarcode(in: image, and: barcodeRequest)
@@ -88,6 +100,12 @@ class MainViewController: UIViewController {
         line.strokeColor = UIColor.cyan.cgColor
         line.lineWidth = 1
         inputImageView.layer.addSublayer(line)
+    }
+    
+    private func clearImageLayers() {
+        inputImageView.layer.sublayers = nil
+        lpns.removeAll(keepingCapacity: false)
+        locations.removeAll(keepingCapacity: false)
     }
     
     @IBAction private func analyzeImage() {
@@ -184,3 +202,16 @@ extension MainViewController {
     }
     
 }
+
+// MARK: - PickerControllerDelegate
+extension MainViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        guard let image = info[UIImagePickerControllerEditedImage] as? UIImage else { return }
+        clearImageLayers()
+        self.inputImageView.image = image
+        dismiss(animated: true)
+    }
+    
+}
+
