@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2961F21D209BA039002277E0 /* VNRectangleObservation+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2961F21C209BA039002277E0 /* VNRectangleObservation+Convenience.swift */; };
 		296978102093A7DA00F73D44 /* String+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2969780F2093A7DA00F73D44 /* String+Convenience.swift */; };
 		296978482097B64300F73D44 /* DispatchQueue+Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296978472097B64300F73D44 /* DispatchQueue+Background.swift */; };
 		29B187D920916DB800B278B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B187D820916DB800B278B4 /* AppDelegate.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2961F21C209BA039002277E0 /* VNRectangleObservation+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VNRectangleObservation+Convenience.swift"; sourceTree = "<group>"; };
 		2969780F2093A7DA00F73D44 /* String+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Convenience.swift"; sourceTree = "<group>"; };
 		296978472097B64300F73D44 /* DispatchQueue+Background.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Background.swift"; sourceTree = "<group>"; };
 		29B187D520916DB800B278B4 /* BarcodeVision.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BarcodeVision.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,6 +85,7 @@
 			children = (
 				2969780F2093A7DA00F73D44 /* String+Convenience.swift */,
 				296978472097B64300F73D44 /* DispatchQueue+Background.swift */,
+				2961F21C209BA039002277E0 /* VNRectangleObservation+Convenience.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -279,6 +282,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				29B187D920916DB800B278B4 /* AppDelegate.swift in Sources */,
+				2961F21D209BA039002277E0 /* VNRectangleObservation+Convenience.swift in Sources */,
 				296978482097B64300F73D44 /* DispatchQueue+Background.swift in Sources */,
 				29B1880720916EA600B278B4 /* MainViewController.swift in Sources */,
 				296978102093A7DA00F73D44 /* String+Convenience.swift in Sources */,

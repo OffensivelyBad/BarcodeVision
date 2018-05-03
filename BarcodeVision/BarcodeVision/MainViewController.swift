@@ -54,13 +54,13 @@ class MainViewController: UIViewController {
                 let newDistance = distance(from: lpn.bottomLeft, to: location.topLeft)
                 if distanceToLocation == 0 {
                     distanceToLocation = newDistance
-                    nearestLocation = location.topLeft
+                    nearestLocation = location.middlePoint()
                 } else {
-                    nearestLocation = newDistance < distanceToLocation ? location.topLeft : nearestLocation
+                    nearestLocation = newDistance < distanceToLocation ? location.middlePoint() : nearestLocation
                     distanceToLocation = newDistance < distanceToLocation ? newDistance : distanceToLocation
                 }
             }
-            drawLine(from: lpn.bottomLeft, to: nearestLocation)
+            drawLine(from: lpn.middleBottomPoint(), to: nearestLocation)
         }
         
         for rect in lpns {
