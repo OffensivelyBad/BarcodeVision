@@ -9,13 +9,25 @@
 import UIKit
 import Vision
 
+struct CaseContents {
+    var caseName: String
+    var rect: VNRectangleObservation
+    var lpns: [String]
+}
+
 class MainViewController: UIViewController {
 
+    enum Mode {
+        case cycleCount, xray
+    }
+    
     @IBOutlet weak var inputImageView: UIImageView!
     private var locations = [VNRectangleObservation]()
     private var lpns = [VNRectangleObservation]()
+    private var casesWithContents = [CaseContents]()
     private var activityIndicator = UIActivityIndicatorView()
     private var loadingView = UIView()
+    private var mode = Mode.xray
     private var loading = false {
         didSet { toggleLoading(on: loading) }
     }
@@ -51,8 +63,47 @@ class MainViewController: UIViewController {
             self.detectBarcode(in: image, and: barcodeRequest)
         }) {
             DispatchQueue.main.async {
-                self.loading = false
-                self.analyzeBarcodes()
+                switch self.mode {
+                case .cycleCount:
+                    self.loading = false
+                    self.analyzeBarcodes()
+                case .xray:
+                    self.analyzeContents(forIndex: 0)
+                }
+            }
+        }
+    }
+    
+    private func analyzeContents(forIndex index: Int) {
+        guard index < casesWithContents.count else {
+            self.loading = false
+            displayContents()
+            return
+        }
+        let theCase = casesWithContents[index]
+        getContents(forCase: theCase) { (contents) in
+            self.casesWithContents[index] = contents
+            self.analyzeContents(forIndex: index + 1)
+        }
+    }
+    
+    private func getContents(forCase theCase: CaseContents, completion: (_ contents: CaseContents) -> Void) {
+        // This would be an API call to get the data
+        completion(CaseContents(caseName: theCase.caseName, rect: theCase.rect, lpns: ["LPN1234567890", "LPN0987654321", "LPN1111111111", "LPN2222222222"]))
+    }
+    
+    private func displayContents() {
+        for theCase in casesWithContents {
+            let lpnX = theCase.rect.bottomRight.x
+            var lpnY = theCase.rect.bottomRight.y
+            for lpn in theCase.lpns {
+                let lpnHeight: CGFloat = 50
+                let lpnWidth: CGFloat = 100
+                let point = getTranslatedPoint(fromPoint: CGPoint(x: lpnX, y: lpnY))
+                let lpnLabel = UILabel(frame: CGRect(x: point.x, y: point.y, width: lpnWidth, height: lpnHeight))
+                lpnLabel.text = lpn
+                view.addSubview(lpnLabel)
+                lpnY += lpnHeight
             }
         }
     }
@@ -83,14 +134,15 @@ class MainViewController: UIViewController {
         }
     }
     
+    private func getTranslatedPoint(fromPoint point: CGPoint) -> CGPoint {
+        let x = point.x * inputImageView.frame.size.width
+        let y = (1 - point.y) * inputImageView.frame.size.height
+        return CGPoint(x: x, y: y)
+    }
+    
     private func drawLine(from: CGPoint, to: CGPoint) {
-        let fromX = from.x * inputImageView.frame.size.width
-        let fromY = (1 - from.y) * inputImageView.frame.size.height
-        let fromPoint = CGPoint(x: fromX, y: fromY)
-        
-        let toX = to.x * inputImageView.frame.size.width
-        let toY = (1 - to.y) * inputImageView.frame.size.height
-        let toPoint = CGPoint(x: toX, y: toY)
+        let fromPoint = getTranslatedPoint(fromPoint: from)
+        let toPoint = getTranslatedPoint(fromPoint: to)
         
         let line = CAShapeLayer()
         let linePath = UIBezierPath()
@@ -179,6 +231,8 @@ extension MainViewController {
             }
             else {
                 self.lpns.append(rect)
+                let caseWithContents = CaseContents(caseName: payloadString, rect: rect, lpns: [])
+                self.casesWithContents.append(caseWithContents)
             }
         }
     }
