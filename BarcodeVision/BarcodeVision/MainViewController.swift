@@ -95,15 +95,18 @@ class MainViewController: UIViewController {
     private func displayContents() {
         for theCase in casesWithContents {
             let lpnX = theCase.rect.bottomRight.x
-            var lpnY = theCase.rect.bottomRight.y
-            for lpn in theCase.lpns {
-                let lpnHeight: CGFloat = 50
-                let lpnWidth: CGFloat = 100
+            let lpnY = theCase.rect.bottomRight.y
+            for (index, lpn) in theCase.lpns.enumerated() {
+                let lpnHeight: CGFloat = 20
+                let lpnWidth: CGFloat = 85
+                let yOffset = lpnHeight * CGFloat(index)
                 let point = getTranslatedPoint(fromPoint: CGPoint(x: lpnX, y: lpnY))
-                let lpnLabel = UILabel(frame: CGRect(x: point.x, y: point.y, width: lpnWidth, height: lpnHeight))
+                let lpnLabel = UILabel(frame: CGRect(x: point.x, y: point.y + yOffset, width: lpnWidth, height: lpnHeight))
+                lpnLabel.font = UIFont.systemFont(ofSize: 10)
+                lpnLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+                lpnLabel.backgroundColor = #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 0.496506382)
                 lpnLabel.text = lpn
                 view.addSubview(lpnLabel)
-                lpnY += lpnHeight
             }
         }
     }
