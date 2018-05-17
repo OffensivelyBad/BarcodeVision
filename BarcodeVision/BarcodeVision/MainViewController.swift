@@ -40,6 +40,27 @@ class MainViewController: UIViewController {
     
     private func addButtons() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Import", style: .plain, target: self, action: #selector(MainViewController.importPhoto))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: getModeButtonTitle(for: mode), style: .plain, target: self, action: #selector(MainViewController.toggleMode))
+    }
+    
+    @objc private func toggleMode() {
+        if mode == .cycleCount {
+            mode = .xray
+        } else if mode == .xray {
+            mode = .cycleCount
+        }
+        navigationItem.rightBarButtonItem?.title = getModeButtonTitle(for: mode)
+    }
+    
+    private func getModeButtonTitle(for mode: Mode) -> String {
+        var title = "Mode"
+        switch mode {
+        case .xray:
+            title = "Xray"
+        default:
+            title = "CC"
+        }
+        return title
     }
     
     @objc private func importPhoto() {
@@ -50,7 +71,7 @@ class MainViewController: UIViewController {
     }
     
     private func addTestImage() {
-        let testImage = UIImage(named: "QRRack")
+        let testImage = UIImage(named: "Rack1")
         guard let image = testImage else { return }
         inputImageView.image = image
         inputImageView.contentMode = .scaleToFill
@@ -83,7 +104,13 @@ class MainViewController: UIViewController {
         let theCase = casesWithContents[index]
         getContents(forCase: theCase) { (contents) in
             self.casesWithContents[index] = contents
-            self.analyzeContents(forIndex: index + 1)
+            if mode == .xray {
+                self.loading = false
+                displayContents()
+            }
+            else {
+                self.analyzeContents(forIndex: index + 1)
+            }
         }
     }
     
@@ -163,8 +190,15 @@ class MainViewController: UIViewController {
         locations.removeAll(keepingCapacity: false)
     }
     
+    private func clearContentLabels() {
+        let labels = view.subviews.compactMap { return $0 as? UILabel }
+        let _ = labels.map { $0.removeFromSuperview() }
+    }
+    
     @IBAction private func analyzeImage() {
         guard let image = inputImageView.image else { return }
+        clearImageLayers()
+        clearContentLabels()
         detectBarcodes(inImage: image)
     }
     
