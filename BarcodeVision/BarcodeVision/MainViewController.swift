@@ -27,7 +27,7 @@ class MainViewController: UIViewController {
     private var casesWithContents = [CaseContents]()
     private var activityIndicator = UIActivityIndicatorView()
     private var loadingView = UIView()
-    private var mode = Mode.xray
+    private var mode = Mode.cycleCount
     private var loading = false {
         didSet { toggleLoading(on: loading) }
     }
@@ -71,7 +71,7 @@ class MainViewController: UIViewController {
     }
     
     private func addTestImage() {
-        let testImage = UIImage(named: "Rack1")
+        let testImage = UIImage(named: "QRTest")
         guard let image = testImage else { return }
         inputImageView.image = image
         inputImageView.contentMode = .scaleToFill
@@ -251,7 +251,7 @@ extension MainViewController {
             try imageHandler.perform([request])
         } catch {
             // TODO: handle errors
-            print("error handling image request")
+            print("error handling image request: \(error)")
         }
     }
     
