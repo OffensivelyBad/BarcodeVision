@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		29328B7425D32F0C00EAFE69 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29328B7325D32F0C00EAFE69 /* ImageHelper.swift */; };
 		2961F21D209BA039002277E0 /* VNRectangleObservation+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2961F21C209BA039002277E0 /* VNRectangleObservation+Convenience.swift */; };
 		296978102093A7DA00F73D44 /* String+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2969780F2093A7DA00F73D44 /* String+Convenience.swift */; };
 		296978482097B64300F73D44 /* DispatchQueue+Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296978472097B64300F73D44 /* DispatchQueue+Background.swift */; };
@@ -37,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		29328B6E25D320FD00EAFE69 /* BarcodeVision.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BarcodeVision.entitlements; sourceTree = "<group>"; };
+		29328B7325D32F0C00EAFE69 /* ImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHelper.swift; sourceTree = "<group>"; };
 		2961F21C209BA039002277E0 /* VNRectangleObservation+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VNRectangleObservation+Convenience.swift"; sourceTree = "<group>"; };
 		2969780F2093A7DA00F73D44 /* String+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Convenience.swift"; sourceTree = "<group>"; };
 		296978472097B64300F73D44 /* DispatchQueue+Background.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Background.swift"; sourceTree = "<group>"; };
@@ -113,11 +116,13 @@
 		29B187D720916DB800B278B4 /* BarcodeVision */ = {
 			isa = PBXGroup;
 			children = (
+				29328B6E25D320FD00EAFE69 /* BarcodeVision.entitlements */,
 				296978462097B62F00F73D44 /* Extensions */,
 				29B1880820916F3100B278B4 /* Supporting Files */,
 				29B1880620916EA600B278B4 /* MainViewController.swift */,
 				29B187DC20916DB800B278B4 /* Main.storyboard */,
 				29B187E420916DBA00B278B4 /* Info.plist */,
+				29328B7325D32F0C00EAFE69 /* ImageHelper.swift */,
 			);
 			path = BarcodeVision;
 			sourceTree = "<group>";
@@ -286,6 +291,7 @@
 				296978482097B64300F73D44 /* DispatchQueue+Background.swift in Sources */,
 				29B1880720916EA600B278B4 /* MainViewController.swift in Sources */,
 				296978102093A7DA00F73D44 /* String+Convenience.swift in Sources */,
+				29328B7425D32F0C00EAFE69 /* ImageHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,7 +397,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -445,7 +451,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -458,6 +464,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BarcodeVision/BarcodeVision.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = EWH85CQYYJ;
 				INFOPLIST_FILE = BarcodeVision/Info.plist;
@@ -467,6 +474,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.offensively-bad.BarcodeVision";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -476,6 +484,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BarcodeVision/BarcodeVision.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = EWH85CQYYJ;
 				INFOPLIST_FILE = BarcodeVision/Info.plist;
@@ -485,6 +494,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.offensively-bad.BarcodeVision";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

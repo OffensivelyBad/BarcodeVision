@@ -9,6 +9,9 @@
 import UIKit
 import Vision
 
+let testImageString = "good1"
+let useGrayscaleImage = false
+
 struct CaseContents {
     var caseName: String
     var rect: VNRectangleObservation
@@ -71,9 +74,11 @@ class MainViewController: UIViewController {
     }
     
     private func addTestImage() {
-        let testImage = UIImage(named: "QRTest")
+        let imageHelper = ImageHelper()
+        let testImage = UIImage(named: testImageString)
         guard let image = testImage else { return }
-        inputImageView.image = image
+        let grayImage = imageHelper.getGrayscaleImage(from: image)
+        inputImageView.image = useGrayscaleImage ? grayImage : image
         inputImageView.contentMode = .scaleToFill
     }
     
@@ -82,6 +87,10 @@ class MainViewController: UIViewController {
         DispatchQueue.background(delay: 0, background: {
             let barcodeRequest = self.getBarcodeRequest()
             self.detectBarcode(in: image, and: barcodeRequest)
+            
+            
+//            let rectangleRequest = self.getRectanglesRequest()
+//            self.detectRectangles(in: image, and: rectangleRequest)
         }) {
             DispatchQueue.main.async {
                 switch self.mode {
@@ -235,18 +244,49 @@ class MainViewController: UIViewController {
 extension MainViewController {
     
     private func getBarcodeRequest() -> VNDetectBarcodesRequest {
-        return VNDetectBarcodesRequest(completionHandler: { [unowned self] (request, error) in
+        let barcodeRequest = VNDetectBarcodesRequest(completionHandler: { [unowned self] (request, error) in
             guard let results = request.results, error == nil else {
                 // TODO: handle no barcodes found
                 return
             }
             self.processBarcodeResults(results)
         })
+        
+        return barcodeRequest
     }
+    
+//    private func getRectanglesRequest() -> VNDetectRectanglesRequest {
+//         let rectangleDetectionRequest: VNDetectRectanglesRequest = {
+//            let rectDetectRequest = VNDetectRectanglesRequest(completionHandler: { [unowned self] (request, error) in
+//                guard let results = request.results, error == nil else {
+//                    return
+//                }
+//                print(results)
+////                self.processBarcodeResults(results)
+//            })
+//             // Customize & configure the request to detect only certain rectangles.
+//             rectDetectRequest.maximumObservations = 16 // Vision currently supports up to 16.
+//             rectDetectRequest.minimumConfidence = 0.6 // Be confident.
+//             rectDetectRequest.minimumAspectRatio = 0.5 // height / width
+//             return rectDetectRequest
+//         }()
+//        return rectangleDetectionRequest
+//    }
+//
+//    private func detectRectangles(in image: UIImage, and request: VNDetectRectanglesRequest) {
+//        guard let imageCG = image.cgImage else { return }
+//        let imageHandler = VNImageRequestHandler(cgImage: imageCG, options: [:])
+//        do {
+//            try imageHandler.perform([request])
+//        } catch {
+//            // TODO: handle errors
+//            print("error handling image request: \(error)")
+//        }
+//    }
     
     private func detectBarcode(in image: UIImage, and request: VNDetectBarcodesRequest) {
         guard let imageCG = image.cgImage else { return }
-        let imageHandler = VNImageRequestHandler(cgImage: imageCG, options: [.properties: ""])
+        let imageHandler = VNImageRequestHandler(cgImage: imageCG, options: [:])
         do {
             try imageHandler.perform([request])
         } catch {
